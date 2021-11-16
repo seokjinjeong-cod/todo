@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.micol.prj.pet.mapper.PetMapper">
+<!-- 전체조회 --> 
+<select id="petSelectList" resultType="petVO">
+	SELECT *
+	  FROM PET
+	 ORDER BY ID
+</select>
+
+<select id="adoptSelectList" resultType="adoptVO">
+	SELECT *
+	  FROM adopt
+	 ORDER BY ID
+</select>
+
+<!-- <insert id="petInsert">
+	INSERT INTO 
+	       PET (NO, 
+	             CONTENTS, 
+	             PETYN ) 
+         VALUES ( ( SELECT MAX(*)+1 FROM PET ), 
+                 #{contents}, 
+                 '0' )
+</insert> -->
+
+<update id="petUpdate">
+	INSERT INTO ADOPT VALUES ( #{id}, #{price} ) 
+</update>
+
+<delete id="petDelete">
+	DELETE PET 
+	 WHERE id = #{id} 
+</delete>
+
+</mapper>
