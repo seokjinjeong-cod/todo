@@ -36,10 +36,8 @@ let basket = {
 		fetch(url)
 		.then(() => {
 			document.querySelector("[id='"+no+"']").closest(".row").remove();
-			basket.reCalc();
-			
+			basket.reCalc()
 		})
-		
 	}
 	,
 	reCalc: function() {
@@ -98,21 +96,15 @@ let basket = {
 		let div = event.target.closest(".subdiv");
 		let price = div.querySelector(".basketprice");
 		let p = parseInt(price.innerText);
-		console.log(event.target.closest(".updown").querySelector(".p_num").value);
 		let qty = parseInt(event.target.closest(".updown").querySelector(".p_num").value);
 		if(ev == "up") {
 			qty += 1;
-			console.log(qty);
-			event.target.closest(".updown").querySelector(".p_num").value = qty;
-			div.querySelector(".sum").innerHTML = p * qty;
 		} else if(ev == "down"){
 			qty -= 1;
-			console.log(qty);
-			event.target.closest(".updown").querySelector(".p_num").value = qty;
-			div.querySelector(".sum").innerHTML = p * qty;
 		}
+		event.target.closest(".updown").querySelector(".p_num").value = qty;
+		div.querySelector(".sum").innerHTML = p * qty + "원";
 		basket.reCalc();
 	}
 };
-
 basket.cartList();

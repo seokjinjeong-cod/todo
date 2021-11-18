@@ -137,7 +137,7 @@ input {
 	</ul>
 
 	<script>
-//ÀüÃ¼¸ñ·Ï Á¶È¸ ajax 
+//ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ ajax 
 fetch("../todoSelect")
 .then(response=>response.json())
 .then(result=>{
@@ -177,11 +177,11 @@ list.addEventListener('click', function(ev) {
 }, false);
 
 document.getElementsByClassName("addBtn")[0].addEventListener('click',function(){
-	// ÇÊµå°ª ÀÐ¾î¼­ ³ÎÃ¼Å©
+	// ï¿½Êµå°ª ï¿½Ð¾î¼­ ï¿½ï¿½Ã¼Å©
 	let inputValue=document.getElementById("myInput").value;
 	if(inputValue===""){
 		alert("Nullpoint exeption");
-		return;	
+		return;
 	}else{
 		fetch("../todoInsert",{
 			method:'POST',
@@ -198,9 +198,9 @@ document.getElementsByClassName("addBtn")[0].addEventListener('click',function()
 		})
 		
 	}
-	// ³Î¾Æ´Ï¸é µðºñ¿¡ ÀÎ¼­Æ®
+	// ï¿½Î¾Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¼ï¿½Æ®
 	
-	// ¼¿·ºÆ®
+	// ï¿½ï¿½ï¿½ï¿½Æ®
 });
 
 
@@ -211,7 +211,7 @@ function newElement(todo) {
   li.innerHTML=todo.contents;
   li.setAttribute('data-no',todo.no);
   if(todo.todoyn ==1){
-  //½Äº°¹øÈ£ Ã¼Å©	 'checked' Å¬·¡½º Ãß°¡  
+  //ï¿½Äºï¿½ï¿½ï¿½È£ Ã¼Å©	 'checked' Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½  
   li.className='checked';
   }
   document.getElementById("myUL").appendChild(li);
