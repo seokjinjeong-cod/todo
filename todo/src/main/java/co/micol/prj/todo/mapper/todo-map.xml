@@ -11,7 +11,7 @@
 <insert id="todoInsert">
 	<selectKey order="BEFORE" keyProperty="no" resultType="string">
 		<!-- select 시퀀스.nextval from dual -->
-		SELECT MAX(no)+1 FROM TODO
+		SELECT NVL(MAX(no), 0)+1 FROM TODO
 	</selectKey>
 	INSERT INTO 
 	       TODO (NO, 

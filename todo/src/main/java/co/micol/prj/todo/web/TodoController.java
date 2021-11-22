@@ -29,6 +29,7 @@ public class TodoController {
 	
 	@PostMapping("/todoUpdate")
 	public TodoVO todoUpdate(TodoVO vo) {
+		 //vo.setTodoyn("0");
 		 mapper.todoUpdate(vo);
 		 return vo;
 	}	

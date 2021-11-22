@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  min-width: 250px;
+}
+
+/* Include the padding and border in an element's total width and height */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove margins and padding from the list */
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the list items */
+ul li {
+  cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  background: #eee;
+  font-size: 18px;
+  transition: 0.2s;
+  
+  /* make the list items unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Set all odd list items to a different color (zebra-stripes) */
+ul li:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+  background: #ddd;
+}
+
+/* When clicked on, add a background color and strike out text */
+ul li.checked {
+  background: #888;
+  color: #fff;
+  text-decoration: line-through;
+}
+
+/* Add a "checked" mark when clicked on */
+ul li.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+/* Style the close button */
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Style the header */
+.header {
+  background-color: #f44336;
+  padding: 30px 40px;
+  color: white;
+  text-align: center;
+}
+
+/* Clear floats after the header */
+.header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the input */
+input {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 75%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
+/* Style the "Add" button */
+.addBtn {
+  padding: 10px;
+  width: 25%;
+  background: #d9d9d9;
+  color: #555;
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+
+.addBtn:hover {
+  background-color: #bbb;
+}
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="myDIV" class="header">
+    <h2 style="margin:5px">My To Do List</h2>
+    <input type="text" id="myInput" v-model="inputContent" placeholder="Title...">
+    <span class="addBtn" @click="todoInsert">Add</span>
+    </div>
+    <button @click="sortNo">번호순으로 정렬</button>
+    <button @click="sortContents">내용순으로 정렬</button>
+    <button @click="sortYn">체크순으로 정렬</button>
+    <ul id="myUL">
+        <li :class="{checked : todo.todoyn=='1'}" v-for="(todo, index) in todos" @click="selectRow(index)">{{todo.contents}}<span @click="todoDelete(index)" class="close">X</span></li>
+    </ul>
+</div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const todoData = {
+        data() {
+            return {
+                inputContent: '',
+                todos: []
+            }
+        },
+        methods: {
+            sortNo() {
+                this.todos.sort((a, b) => {
+                    if(a.no > b.no) {
+                        return 1;
+                    } else if(a.no == b.no) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                });
+                console.table(this.todos);
+            },
+            sortContents() {
+                this.todos.sort((a, b) => {
+                    if(a.contents > b.contents) {
+                        return 1;
+                    } else if(a.contents == b.contents) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                });
+                console.table(this.todos);
+            },
+            sortYn() {
+                this.todos.sort((a, b) => {
+                    if(a.todoyn > b.todoyn) {
+                       return 1;
+                    } else if(a.todoyn == b.todoyn) {
+                       
+                    } else {
+                        if(a.contents > b.contents) {
+                            return -1;
+                        }
+                    }
+                });
+                console.table(this.todos);
+            },
+            todoDelete(index) {
+            	var no = this.todos[index].no;
+            	console.log(index);
+                event.stopPropagation();
+                //ajax
+                fetch("../todoDelete?no=" + no )  //서버에 삭제 요청
+			    .then( response => response.json() )      // json 변환
+			    .then( result => this.todos.splice(index, 1) )  //li 태그 삭제
+                //event.target.closest("li").remove();
+            },
+            todoInsert() {
+            	if(this.inputContent == ''){
+            		alert('입력하세요');
+            		return;
+            	}
+                fetch("../todoInsert",{
+            		method: 'POST',
+            		headers: {
+            		      'Content-Type': 'application/x-www-form-urlencoded',
+            		    },
+            		body : "contents=" + this.inputContent
+            	})
+            	.then(response => response.json())
+            	.then(result => {
+            		this.todos.push(result);
+            		this.inputContent = '';
+            		//this.todos.push({no: result.no, contents: this.inputContent, todoyn: 0});
+            		//inputValue = '';
+            	})
+                //this.todos.push({no: hNo+1, contents: this.inputContent, todoyn: 0})
+                // console.log(document.querySelector('[id="myInput"]').value);
+            },
+            selectRow(index) {
+                var no = this.todos[index].no;
+                this.todos[index].todoyn = this.todos[index].todoyn == '1' ? '0':'1';
+            	fetch("../todoUpdate",{
+            		method: 'POST',
+            		headers: {
+            		      'Content-Type': 'application/x-www-form-urlencoded',
+            		    },
+            		body : 'no=' + no + '&todoyn=' + this.todos[index].todoyn   //질의문자열 no=2&todoyn=1
+            	})
+            	.then(response => response.json())
+            	.then(result => {
+            		console.log(result);
+            		//this.todos[index].todoyn = result.todoyn;
+            	})
+                //if(this.todos[index].todoyn == 0) {
+                //    this.todos[index].todoyn = '1';
+                //} else {
+                //    this.todos[index].todoyn = '0';
+                //}
+            }
+        },
+        mounted() {
+        	fetch("../todoSelect")
+        	.then(response => response.json())
+        	.then(result => this.todos = result)
+        },
+        updated() {
+        	
+        }
+    }
+    const todoApp = Vue.createApp(todoData).mount('#app')
+</script>
+</body>
+</html>

@@ -2,26 +2,7 @@ fetch("userList")
 	.then(response => response.json())
 	.then(result => {
 		for (data of result) {
-			let user = document.createElement("tr");
-			user.setAttribute("id", data.id)
-			let id = document.createElement("td"); id.innerHTML = data.id;
-			let password = document.createElement("td"); password.innerHTML = data.password;
-			let name = document.createElement("td"); name.innerHTML = data.name;
-			let role = document.createElement("td"); role.innerHTML = data.role;
-			let btn = document.createElement("td");
-			let btnUpd = document.createElement("button");
-			btnUpd.setAttribute("class", "btnUpd"); btnUpd.innerHTML = "조회";
-			btnUpd.setAttribute("onclick", "selUser(this)");
-			let btnDel = document.createElement("button");
-			btnDel.setAttribute("class", "btnDel"); btnDel.innerHTML = "삭제";
-			btnDel.setAttribute("onclick", "delUser(this)");
-			btn.appendChild(btnUpd); btn.appendChild(btnDel);
-			user.appendChild(id);
-			user.appendChild(password);
-			user.appendChild(name);
-			user.appendChild(role);
-			user.appendChild(btn);
-			document.querySelector("tbody").appendChild(user);
+			addRow(data);
 		}
 
 	})
@@ -90,39 +71,34 @@ document.getElementById("btnInsert").addEventListener("click", function() {
 		body : "id=" + id + "&name=" + name + "&password=" + password + "&role=" + role
 	})
 	.then(response => response.json())
-	.then(result => {
-			let user = document.createElement("tr");
-			user.setAttribute("id", result.id)
-			let id = document.createElement("td"); id.innerHTML = result.id;
-			let password = document.createElement("td"); password.innerHTML = result.password;
-			let name = document.createElement("td"); name.innerHTML = result.name;
-			let role = document.createElement("td"); role.innerHTML = result.role;
-			let btn = document.createElement("td");
-			let btnUpd = document.createElement("button");
-			btnUpd.setAttribute("class", "btnUpd"); btnUpd.innerHTML = "조회";
-			btnUpd.setAttribute("onclick", "selUser(this)");
-			let btnDel = document.createElement("button");
-			btnDel.setAttribute("class", "btnDel"); btnDel.innerHTML = "삭제";
-			btnDel.setAttribute("onclick", "delUser(this)");
-			btn.appendChild(btnUpd); btn.appendChild(btnDel);
-			user.appendChild(id);
-			user.appendChild(password);
-			user.appendChild(name);
-			user.appendChild(role);
-			user.appendChild(btn);
-			document.querySelector("tbody").appendChild(user);
+	.then(data => {
+			addRow(data);
 	})
 	
 })
 
-
-
-
-
-
-
-
-
+function addRow(data){
+	let user = document.createElement("tr");
+	user.setAttribute("id", data.id)
+	let id = document.createElement("td"); id.innerHTML = data.id;
+	let password = document.createElement("td"); password.innerHTML = data.password;
+	let name = document.createElement("td"); name.innerHTML = data.name;
+	let role = document.createElement("td"); role.innerHTML = data.role;
+	let btn = document.createElement("td");
+	let btnUpd = document.createElement("button");
+	btnUpd.setAttribute("class", "btnUpd"); btnUpd.innerHTML = "조회";
+	btnUpd.setAttribute("onclick", "selUser(this)");
+	let btnDel = document.createElement("button");
+	btnDel.setAttribute("class", "btnDel"); btnDel.innerHTML = "삭제";
+	btnDel.setAttribute("onclick", "delUser(this)");
+	btn.appendChild(btnUpd); btn.appendChild(btnDel);
+	user.appendChild(id);
+	user.appendChild(password);
+	user.appendChild(name);
+	user.appendChild(role); 
+	user.appendChild(btn);
+	document.querySelector("tbody").appendChild(user);
+}
 
 
 
