@@ -16,7 +16,7 @@
                 <h2>사용자 등록 및 수정</h2>
                 <div class="form-group">
                     <label>아이디:</label>
-                    <input type="text" class="form-control" name="id" v-model="user.id">
+                    <input :disabled="rs" type="text" class="form-control" name="id" v-model="user.id">
                 </div>
                 <div class="form-group">
                     <label>이름:</label>
@@ -34,8 +34,8 @@
                     </select>
                 </div>
                 <div class="btn-group">
-                    <input type="button" class="btn btn-primary" value="등록" id="btnInsert" />
-                    <input type="button" class="btn btn-primary" value="수정" id="btnUpdate" />
+                    <input type="button" class="btn btn-primary" value="등록" id="btnInsert" @click="userInsert(user)"/>
+                    <input type="button" class="btn btn-primary" value="수정" id="btnUpdate" @click="userUpdate(user)"/>
                     <input type="button" class="btn btn-primary" value="초기화" id="btnInit" />
                 </div>
             </form>
@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(user, index) in users">
+                    <tr v-for="(user, index) in users" :key="user.id">
                         <td class="text-center">{{user.id}}</td>
                         <td class="text-center">{{user.password}}</td>
                         <td class="text-center">{{user.name}}</td>
@@ -74,7 +74,9 @@
             data() {
                 return {
                     users: [],
-                    user: {id:'', password:'', name:'', role:''}
+                    user: {id:'', password:'', name:'', role:''},
+                    idx: '',
+                    rs: false
                 }
             },
             methods: {
@@ -91,13 +93,46 @@
                     }
                 },
                 selUser(index) {
-                    let id = this.users[index].id;
-                    console.log(this.users[index].role);
-                    fetch("../users?id=" + id)
+                    fetch("../users?id=" + this.users[index].id)
                         .then(response => response.json())
                         .then(result => {
                             this.user = result;
+                            this.idx = index;
+                            this.rs = true;
                         })
+                },
+                userInsert(user) {
+                    fetch("../insertUser", {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                        body : "id=" + user.id + "&name=" + user.name + "&password=" + user.password + "&role=" + user.role
+                    })
+                    .then(response => response.json())
+                    .then(result => this.users.push(result))
+                },
+                userUpdate(user) {
+                    fetch("../updateUser", {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                        body : "id=" + user.id + "&name=" + user.name + "&password=" + user.password + "&role=" + user.role
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                    	console.log(result);
+                        this.users[this.idx].password = result.password;
+                        this.users[this.idx].name = result.name;
+                        this.users[this.idx].role = result.role;
+                        this.rs = false;
+                        // fetch("../userList")
+                        // .then(response => response.json())
+                        // .then(result =>
+                        //     this.users = result
+                        // )
+                    })
                 }
 
             },
@@ -107,8 +142,10 @@
                     .then(result =>
                         this.users = result
                     )
+            },
+            updated() {
+            	
             }
-
         })
         const userApp = Vue.createApp(userData).mount('#app');
     </script>
