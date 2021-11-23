@@ -53,7 +53,6 @@
 			<th class="text-center">이름</th>
 			<th class="text-center">롤</th>
 			<th class="text-center"></th>
-			<th class="text-center"></th>
 		</tr>
 		</thead>
 		<tbody>

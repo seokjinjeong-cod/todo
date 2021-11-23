@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+        <form>
+            <label>이름 : </label>
+            <input v-model="member.username"><br>
+            <label>메모 : </label>
+            <textarea v-model="member.memo"></textarea><br>
+            <label>취미 : </label>
+            <span v-for="hobby in hobby_options" :key="hobby">
+                <label>{{hobby}}</label>
+                <input type="checkbox" v-model="member.hobby" v-bind:value="hobby">
+            </span><br>
+            <label>직업 : </label>
+            <select v-model="member.job">
+                <option v-for="jobItem in job_options" :value="jobItem">{{jobItem}}</option>
+            </select>
+        </form>
+        <div>{{member.username}}</div>
+        <div style="white-space: pre-line;">{{member.memo}}</div>
+    </div>
+    <script>
+        const formData = {
+            data() {
+                return {
+                    job_options: ['프로그래머', '디자이너', '퍼블리셔'],
+                    hobby_options: ['축구', '게임', '볼링', '독서', '영화', '수영'],
+                    member: {
+                        username: '',
+                        memo: '',
+                        hobby: ['축구', '게임'],
+                        job: '디자이너'
+                    }
+                }
+            },
+            computed() {
+
+            },
+            methods: {
+
+            },
+            mounted() {
+
+            }
+        }
+        const formApp = Vue.createApp(formData);
+        const mountedApp = formApp.mount('#app');
+    </script>
+</body>
+</html>
